@@ -9,7 +9,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080/v1",
+      "url": "http://localhost:8080/api/v1",
       "description": "Development server"
     }
   ],
@@ -57,7 +57,7 @@
             "description": "Validation error"
           },
           "500": {
-            "description": "Internatl error registering user"
+            "description": "Internal error registering user"
           }
         }
       }
@@ -118,43 +118,217 @@
             }
           },
           "400": {
-            "description": "Validation error",
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/items": {
+      "get": {
+        "summary": "Get items",
+        "description": "Retrieves a list of items.",
+        "tags": ["Items"],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Search query for item names",
+              "example": "Item"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of items",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Item"
                   }
                 }
               }
             }
           },
           "500": {
-            "description": "Internal server error",
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new item",
+        "description": "Adds a new item to the list.",
+        "tags": ["Items"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the item",
+                    "example": "Pão"
+                  },
+                  "categoryId": {
+                    "type": "string",
+                    "description": "ID of the category",
+                    "example": "603c9a5b85e12a4b74cddc34"
+                  }
+                },
+                "required": ["name", "categoryId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Item created successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Internal server error"
-                    }
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Internal error creating item"
+          }
+        }
+      }
+    },
+    "/items/{id}": {
+      "delete": {
+        "summary": "Delete an item",
+        "description": "Removes an item from the list.",
+        "tags": ["Items"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the item to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Item deleted successfully"
+          },
+          "404": {
+            "description": "Item not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Get all categories",
+        "description": "Retrieves a list of all categories.",
+        "tags": ["Categories"],
+        "responses": {
+          "200": {
+            "description": "List of categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
                   }
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new category",
+        "description": "Adds a new category to the list.",
+        "tags": ["Categories"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the category",
+                    "example": "Laticínios"
+                  }
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Category created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Internal error creating category"
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "delete": {
+        "summary": "Delete a category",
+        "description": "Removes a category from the list.",
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the category to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Category deleted successfully"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -185,6 +359,67 @@
         },
         "required": ["email", "createdAt", "updatedAt"]
       },
+      "Item": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID of the item",
+            "example": "603c9a5b85e12a4b74cddc34"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the item",
+            "example": "Pão"
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "ID of the category",
+            "example": "603c9a5b85e12a4b74cddc34"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the item was created",
+            "example": "2024-01-01T00:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the item was last updated",
+            "example": "2024-01-01T00:00:00Z"
+          }
+        },
+        "required": ["_id", "name", "categoryId", "createdAt", "updatedAt"]
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID of the category",
+            "example": "603c9a5b85e12a4b74cddc34"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the category",
+            "example": "Laticínios"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the category was created",
+            "example": "2024-01-01T00:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the category was last updated",
+            "example": "2024-01-01T00:00:00Z"
+          }
+        },
+        "required": ["_id", "name", "createdAt", "updatedAt"]
+      },
       "LoginResponse": {
         "type": "object",
         "properties": {
@@ -193,33 +428,13 @@
             "description": "JWT token for authenticated user",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
           },
-          "user": {
-            "type": "object",
-            "properties": {
-              "email": {
-                "type": "string",
-                "description": "Email address of the user",
-                "example": "user@example.com"
-              },
-              "createdAt": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "updatedAt": {
-                "type": "string",
-                "format": "date-time"
-              }
-            }
+          "expiresIn": {
+            "type": "integer",
+            "description": "Token expiration time in seconds",
+            "example": 3600
           }
         },
-        "required": ["token", "user"]
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+        "required": ["token", "expiresIn"]
       }
     }
   }

@@ -13,10 +13,17 @@ const port = 8080;
 app.use(express.json());
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
-app.use("/v1", authRouter);
-app.use("/v1", itemRouter);
-app.use("/v1", shoppingListRouter);
-app.use("/v1", categoryRouter);
+app.use("/api/v1", authRouter);
+app.use("/api/v1", categoryRouter);
+app.use("/api/v1", itemRouter);
+app.use("/api/v1", shoppingListRouter);
+
+app.use((req, res, next) => {
+  console.log(
+    `${req.method} ${req.path} - Params: ${JSON.stringify(req.params)}`
+  );
+  next();
+});
 
 async function startServer() {
   try {
