@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface Item extends Document {
+export interface Item extends Document {
   name: string;
   categoryId: mongoose.Types.ObjectId;
   createdAt: Date;

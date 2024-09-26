@@ -389,11 +389,6 @@
                           "description": "ID of the item (must exist in Items)",
                           "example": "66f45ec4b870fea5aa0b508c"
                         },
-                        "name": {
-                          "type": "string",
-                          "description": "Name of the item (as retrieved from Items)",
-                          "example": "Iogurte Natural"
-                        },
                         "quantity": {
                           "type": "integer",
                           "description": "Quantity of the item",
