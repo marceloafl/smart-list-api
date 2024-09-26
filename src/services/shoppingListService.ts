@@ -20,6 +20,11 @@ class ShoppingListService {
   }) {
     return await shoppingListRepository.create(shoppingListData);
   }
+
+  async deleteShoppingList(id: string) {
+    const result = await shoppingListRepository.delete(id);
+    return result;
+  }
 }
 
 export default new ShoppingListService();

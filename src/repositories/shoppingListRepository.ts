@@ -21,6 +21,10 @@ class ShoppingListRepository {
     const newShoppingList = new ShoppingListModel(shoppingListData);
     return await newShoppingList.save();
   }
+
+  async delete(id: string) {
+    return await ShoppingListModel.findByIdAndDelete(id);
+  }
 }
 
 export default new ShoppingListRepository();

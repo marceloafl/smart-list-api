@@ -71,3 +71,18 @@ export const createShoppingList = async (req: Request, res: Response) => {
     }
   }
 };
+
+export const deleteShoppingList = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const result = await shoppingListService.deleteShoppingList(id);
+    if (result) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ error: "Shopping list not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error deleting shopping list" });
+  }
+};

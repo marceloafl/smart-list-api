@@ -438,6 +438,35 @@
           }
         }
       }
+    },
+    "/shopping-lists/{id}": {
+      "delete": {
+        "summary": "Delete a shopping list",
+        "description": "Removes a shopping list from the list.",
+        "tags": ["ShoppingLists"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the shopping list to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Shopping list deleted successfully"
+          },
+          "404": {
+            "description": "Shopping list not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "components": {
