@@ -14,6 +14,10 @@ class ItemRepository {
     return await ItemModel.findOne({ name });
   }
 
+  async findByIds(ids: mongoose.Types.ObjectId[]) {
+    return await ItemModel.find({ _id: { $in: ids } });
+  }
+
   async create(itemData: { name: string; categoryId: string }) {
     const newItem = new ItemModel(itemData);
     return await newItem.save();

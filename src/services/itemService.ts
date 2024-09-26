@@ -1,8 +1,13 @@
+import mongoose from "mongoose";
 import itemRepository from "../repositories/itemRepository";
 
 class ItemService {
   async searchItems(query: string) {
     return await itemRepository.searchByName(query);
+  }
+
+  async findByIds(ids: mongoose.Types.ObjectId[]) {
+    return await itemRepository.findByIds(ids);
   }
 
   async createItem(itemData: { name: string; categoryId: string }) {

@@ -1,8 +1,12 @@
 import express from "express";
-import { getAllShoppingList } from "../controllers/shoppingListController";
+import {
+  createShoppingList,
+  getAllShoppingList,
+} from "../controllers/shoppingListController";
 
 const router = express.Router();
 
-router.get("/shopping-list", getAllShoppingList);
+router.get("/shopping-lists", getAllShoppingList);
+router.post("/shopping-lists", createShoppingList);
 
 export default router;

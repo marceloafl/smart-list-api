@@ -1,6 +1,26 @@
-import ShoppingList from "../models/shoppingListModel";
+import mongoose from "mongoose";
+import ShoppingListModel from "../models/shoppingListModel";
 
-export const getAllShoppingLists = async () => {
-  // return await ShoppingList.find();
-  return ["Shopping list 1", "Shopping list 2"];
-};
+class ShoppingListRepository {
+  async findAll() {
+    return await ShoppingListModel.find();
+  }
+
+  async create(shoppingListData: {
+    userId: mongoose.Types.ObjectId;
+    title: string;
+    items: {
+      itemId: mongoose.Types.ObjectId;
+      name: string;
+      quantity: number;
+      checked?: boolean;
+      comment?: string;
+      price: number;
+    }[];
+  }) {
+    const newShoppingList = new ShoppingListModel(shoppingListData);
+    return await newShoppingList.save();
+  }
+}
+
+export default new ShoppingListRepository();

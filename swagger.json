@@ -332,6 +332,117 @@
           }
         }
       }
+    },
+    "/shopping-lists": {
+      "get": {
+        "summary": "Get all shopping lists",
+        "description": "Retrieves a list of all shopping lists.",
+        "tags": ["ShoppingLists"],
+        "responses": {
+          "200": {
+            "description": "List of shopping list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShoppingList"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new shopping list",
+        "description": "Adds a new shopping list for the user.",
+        "tags": ["ShoppingLists"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "ID of the user creating the shopping list",
+                    "example": "66f1c9ba7ab0aefde75d20f4"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the shopping list",
+                    "example": "Lista de Compras do Mês"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "itemId": {
+                          "type": "string",
+                          "description": "ID of the item (must exist in Items)",
+                          "example": "66f45ec4b870fea5aa0b508c"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the item (as retrieved from Items)",
+                          "example": "Iogurte Natural"
+                        },
+                        "quantity": {
+                          "type": "integer",
+                          "description": "Quantity of the item",
+                          "example": 2
+                        },
+                        "checked": {
+                          "type": "boolean",
+                          "description": "Whether the item is checked",
+                          "example": false
+                        },
+                        "comment": {
+                          "type": "string",
+                          "description": "Comment about the item",
+                          "example": "Preferência por integral"
+                        },
+                        "price": {
+                          "type": "number",
+                          "description": "Price of the item",
+                          "example": 3.5
+                        }
+                      },
+                      "required": ["itemId", "name", "quantity", "price"]
+                    }
+                  }
+                },
+                "required": ["title", "items"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Shopping list created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Internal error creating shopping list"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -420,6 +531,73 @@
         },
         "required": ["_id", "name", "createdAt", "updatedAt"]
       },
+      "ShoppingList": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID of the shopping list",
+            "example": "603c9a5b85e12a4b74cddc34"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the shopping list",
+            "example": "Lista de Compras do Mês"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "itemId": {
+                  "type": "string",
+                  "description": "ID of the item",
+                  "example": "603c9a5b85e12a4b74cddc34"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the item",
+                  "example": "Pão"
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "Quantity of the item",
+                  "example": 2
+                },
+                "checked": {
+                  "type": "boolean",
+                  "description": "Whether the item is checked",
+                  "example": false
+                },
+                "comment": {
+                  "type": "string",
+                  "description": "Comment about the item",
+                  "example": "Preferência por integral"
+                },
+                "price": {
+                  "type": "number",
+                  "description": "Price of the item",
+                  "example": 3.5
+                }
+              },
+              "required": ["itemId", "name", "quantity", "price"]
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp when the shopping list was created",
+              "example": "2024-01-01T00:00:00Z"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp when the shopping list was last updated",
+              "example": "2024-01-01T00:00:00Z"
+            }
+          },
+          "required": ["_id", "title", "items", "createdAt", "updatedAt"]
+        }
+      },
       "LoginResponse": {
         "type": "object",
         "properties": {
@@ -435,6 +613,13 @@
           }
         },
         "required": ["token", "expiresIn"]
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

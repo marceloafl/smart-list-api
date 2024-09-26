@@ -10,7 +10,7 @@ const participantSchema = new Schema<Participant>({
   role: { type: String, required: true },
 });
 
-interface ShoppingListItem {
+export interface ShoppingListItem {
   itemId: mongoose.Types.ObjectId;
   name: string;
   quantity: number;
