@@ -11,6 +11,7 @@ const itemSchema = new Schema<Item>({
     type: String,
     required: true,
     trim: true,
+    index: true,
   },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +23,8 @@ const itemSchema = new Schema<Item>({
     default: Date.now,
   },
 });
+
+itemSchema.index({ name: "text" });
 
 const ItemModel = mongoose.model<Item>("Item", itemSchema);
 export default ItemModel;

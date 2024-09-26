@@ -30,7 +30,6 @@ export const createItem = async (req: Request, res: Response) => {
 };
 
 export const deleteItem = async (req: Request, res: Response) => {
-  console.log("alou");
   const { id } = req.params;
 
   try {

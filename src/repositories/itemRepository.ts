@@ -4,7 +4,7 @@ import ItemModel from "../models/itemModel";
 class ItemRepository {
   async searchByName(query: string) {
     return await ItemModel.find({
-      name: { $regex: `^${query}`, $options: "i" },
+      $text: { $search: query },
     })
       .limit(10)
       .populate("categoryId");
