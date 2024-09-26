@@ -25,6 +25,20 @@ class ShoppingListService {
     const result = await shoppingListRepository.delete(id);
     return result;
   }
+
+  async findById(id: string) {
+    return await shoppingListRepository.findById(id);
+  }
+
+  async clearShoppingList(id: string) {
+    const shoppingList = await this.findById(id);
+    if (!shoppingList) {
+      throw new Error("Shopping list not found");
+    }
+    shoppingList.items = [];
+    await shoppingList.save();
+    return shoppingList;
+  }
 }
 
 export default new ShoppingListService();

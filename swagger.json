@@ -440,6 +440,87 @@
       }
     },
     "/shopping-lists/{id}": {
+      "put": {
+        "summary": "Update a shopping list",
+        "description": "Updates an existing shopping list.",
+        "tags": ["ShoppingLists"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the shopping list to update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "itemsToAdd": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ShoppingListItem"
+                    }
+                  },
+                  "itemsToRemove": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "ID of the item to remove"
+                    }
+                  }
+                },
+                "required": []
+              },
+              "examples": {
+                "example1": {
+                  "summary": "Example of updating a shopping list",
+                  "value": {
+                    "itemsToAdd": [
+                      {
+                        "itemId": "603c9a5b85e12a4b74cddc34",
+                        "quantity": 2,
+                        "checked": false,
+                        "comment": "Preferência por integral",
+                        "price": 3.5
+                      }
+                    ],
+                    "itemsToRemove": ["603c9a5b85e12a4b74cddc33"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shopping list updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingList"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Shopping list not found"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Internal error updating shopping list"
+          }
+        }
+      },
       "delete": {
         "summary": "Delete a shopping list",
         "description": "Removes a shopping list from the list.",
@@ -464,6 +545,41 @@
           },
           "500": {
             "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Clear a shopping list",
+        "description": "Clears all items from a shopping list.",
+        "tags": ["ShoppingLists"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the shopping list to clear",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shopping list cleared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingList"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Shopping list not found"
+          },
+          "500": {
+            "description": "Internal error clearing shopping list"
           }
         }
       }

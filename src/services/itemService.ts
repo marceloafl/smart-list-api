@@ -10,6 +10,10 @@ class ItemService {
     return await itemRepository.findByIds(ids);
   }
 
+  async findOneById(id: mongoose.Types.ObjectId) {
+    return await itemRepository.findOneById(id);
+  }
+
   async createItem(itemData: { name: string; categoryId: string }) {
     const existingCategory = await itemRepository.findByName(itemData.name);
     if (existingCategory) {

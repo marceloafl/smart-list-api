@@ -86,3 +86,88 @@ export const deleteShoppingList = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Error deleting shopping list" });
   }
 };
+
+export const updateShoppingList = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const {
+    itemsToAdd,
+    itemsToRemove,
+  }: {
+    itemsToAdd?: ShoppingListItem[];
+    itemsToRemove?: mongoose.Types.ObjectId[];
+  } = req.body;
+
+  try {
+    const shoppingList = await shoppingListService.findById(id);
+    if (!shoppingList) {
+      return res.status(404).json({ error: "Shopping list not found" });
+    }
+
+    if (itemsToAdd) {
+      const existingItemIds = shoppingList.items.map((item) =>
+        item.itemId.toString()
+      );
+
+      const duplicateItem = itemsToAdd.find((item) =>
+        existingItemIds.includes(item.itemId.toString())
+      );
+      if (duplicateItem) {
+        return res.status(400).json({
+          error: `Item with ID ${duplicateItem.itemId} already exists in the shopping list.`,
+        });
+      }
+
+      const itemsWithDetails = await Promise.all(
+        itemsToAdd.map(async (item) => {
+          const itemDetails = await itemService.findOneById(item.itemId);
+          if (!itemDetails) {
+            throw new Error(`Item with ID ${item.itemId} does not exist.`);
+          }
+
+          return {
+            itemId: item.itemId,
+            name: itemDetails.name,
+            quantity: item.quantity,
+            checked: item.checked || false,
+            comment: item.comment,
+            price: item.price,
+          };
+        })
+      );
+
+      shoppingList.items.push(...itemsWithDetails);
+    }
+
+    if (itemsToRemove) {
+      shoppingList.items = shoppingList.items.filter((item) => {
+        return !itemsToRemove.some((idToRemove) => {
+          const objectIdToRemove = new mongoose.Types.ObjectId(idToRemove);
+          return objectIdToRemove.equals(item.itemId);
+        });
+      });
+    }
+
+    await shoppingList.save();
+
+    res.status(200).json(shoppingList);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error updating shopping list" });
+  }
+};
+
+export const clearShoppingList = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const updatedShoppingList = await shoppingListService.clearShoppingList(id);
+    res.status(200).json(updatedShoppingList);
+  } catch (err) {
+    console.error(err);
+    if (err instanceof Error) {
+      res.status(404).json({ error: err.message });
+    } else {
+      res.status(500).json({ error: "Error clearing shopping list" });
+    }
+  }
+};

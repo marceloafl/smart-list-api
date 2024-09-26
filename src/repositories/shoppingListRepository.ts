@@ -25,6 +25,10 @@ class ShoppingListRepository {
   async delete(id: string) {
     return await ShoppingListModel.findByIdAndDelete(id);
   }
+
+  async findById(id: string) {
+    return await ShoppingListModel.findById(id);
+  }
 }
 
 export default new ShoppingListRepository();
