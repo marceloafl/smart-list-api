@@ -156,6 +156,48 @@ export const updateShoppingList = async (req: Request, res: Response) => {
   }
 };
 
+export const updateItemCheckedStatus = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const {
+    itemId,
+    checked,
+  }: {
+    itemId?: mongoose.Types.ObjectId;
+    checked: boolean;
+  } = req.body;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid shopping list ID" });
+    }
+
+    const shoppingList = await shoppingListService.findById(id);
+    if (!shoppingList) {
+      return res.status(404).json({ error: "Shopping list not found" });
+    }
+
+    if (itemId) {
+      const item = shoppingList.items.find(
+        (item) => item.itemId.toString() === itemId.toString()
+      );
+      if (!item) {
+        return res.status(404).json({
+          error: `Item with ID ${itemId} not found in this shopping list`,
+        });
+      }
+
+      item.checked = checked;
+    }
+
+    await shoppingList.save();
+
+    res.status(200).json(shoppingList);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error updating item checked status" });
+  }
+};
+
 export const clearShoppingList = async (req: Request, res: Response) => {
   const { id } = req.params;
 

@@ -547,8 +547,10 @@
             "description": "Internal server error"
           }
         }
-      },
-      "patch": {
+      }
+    },
+    "/shopping-lists/{id}/clear-list": {
+      "put": {
         "summary": "Clear a shopping list",
         "description": "Clears all items from a shopping list.",
         "tags": ["ShoppingLists"],
@@ -580,6 +582,76 @@
           },
           "500": {
             "description": "Internal error clearing shopping list"
+          }
+        }
+      }
+    },
+    "/shopping-lists/{id}/check-status": {
+      "put": {
+        "summary": "Update the checked status of an item in a shopping list",
+        "description": "Updates the 'checked' status of a specific item within a shopping list.",
+        "tags": ["ShoppingLists"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the shopping list to update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "itemId": {
+                    "type": "string",
+                    "description": "ID of the item to toggle the checked status"
+                  },
+                  "checked": {
+                    "type": "boolean",
+                    "description": "The new checked status of the item (true or false)"
+                  }
+                },
+                "required": ["itemId", "checked"]
+              },
+              "examples": {
+                "example1": {
+                  "summary": "Example of toggling a item in a shopping list",
+                  "value": {
+                    "itemId": "603c9a5b85e12a4b74cddc33",
+                    "checked": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shopping list updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingList"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Shopping list not found"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Internal error updating shopping list"
           }
         }
       }
