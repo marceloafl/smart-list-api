@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import itemRepository from "../repositories/itemRepository";
 
 class ItemService {
@@ -6,11 +5,11 @@ class ItemService {
     return await itemRepository.searchByName(query);
   }
 
-  async findByIds(ids: mongoose.Types.ObjectId[]) {
+  async findByIds(ids: string[]) {
     return await itemRepository.findByIds(ids);
   }
 
-  async findOneById(id: mongoose.Types.ObjectId) {
+  async findOneById(id: string) {
     return await itemRepository.findOneById(id);
   }
 

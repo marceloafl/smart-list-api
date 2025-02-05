@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import categoryRepository from "../repositories/categoryRepository";
 import itemRepository from "../repositories/itemRepository";
 
@@ -21,7 +20,7 @@ class CategoryService {
     const uncategorized = await categoryRepository.findOrCreateUncategorized();
     await itemRepository.updateCategoryForItems(
       id,
-      uncategorized._id as mongoose.Types.ObjectId
+      uncategorized._id as string
     );
 
     const result = await categoryRepository.delete(id);

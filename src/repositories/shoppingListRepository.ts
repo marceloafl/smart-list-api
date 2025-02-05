@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import ShoppingListModel from "../models/shoppingListModel";
 
 class ShoppingListRepository {
@@ -7,10 +6,10 @@ class ShoppingListRepository {
   }
 
   async create(shoppingListData: {
-    userId: mongoose.Types.ObjectId;
+    userId: string;
     title: string;
     items: {
-      itemId: mongoose.Types.ObjectId;
+      itemId: string;
       name: string;
       quantity: number;
       checked?: boolean;

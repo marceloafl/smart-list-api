@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import ItemModel from "../models/itemModel";
 
 class ItemRepository {
@@ -14,11 +13,11 @@ class ItemRepository {
     return await ItemModel.findOne({ name });
   }
 
-  async findByIds(ids: mongoose.Types.ObjectId[]) {
+  async findByIds(ids: string[]) {
     return await ItemModel.find({ _id: { $in: ids } });
   }
 
-  async findOneById(id: mongoose.Types.ObjectId) {
+  async findOneById(id: string) {
     return await ItemModel.findById(id);
   }
 
@@ -32,10 +31,7 @@ class ItemRepository {
     return result;
   }
 
-  async updateCategoryForItems(
-    categoryId: string,
-    newCategoryId: mongoose.Types.ObjectId
-  ) {
+  async updateCategoryForItems(categoryId: string, newCategoryId: string) {
     return await ItemModel.updateMany(
       { categoryId },
       { categoryId: newCategoryId }

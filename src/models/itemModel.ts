@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface Item extends Document {
   name: string;
-  categoryId: mongoose.Types.ObjectId;
+  categoryId: string;
   createdAt: Date;
 }
 
@@ -14,7 +14,7 @@ const itemSchema = new Schema<Item>({
     index: true,
   },
   categoryId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "Category",
     required: true,
   },

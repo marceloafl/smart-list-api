@@ -21,7 +21,7 @@ export const createShoppingList = async (req: Request, res: Response) => {
     title,
     items,
   }: {
-    userId: mongoose.Types.ObjectId;
+    userId: string;
     title: string;
     items: ShoppingListItem[];
   } = req.body;
@@ -37,10 +37,7 @@ export const createShoppingList = async (req: Request, res: Response) => {
     const itemsWithDetails = await Promise.all(
       items.map(async (item) => {
         const itemDetails = existingItems.find((existingItem) => {
-          return (
-            existingItem._id instanceof mongoose.Types.ObjectId &&
-            existingItem._id.equals(item.itemId)
-          );
+          return existingItem.id === item.itemId;
         });
         if (!itemDetails) {
           throw new Error(`Item with ID ${item.itemId} does not exist.`);
@@ -94,7 +91,7 @@ export const updateShoppingList = async (req: Request, res: Response) => {
     itemsToRemove,
   }: {
     itemsToAdd?: ShoppingListItem[];
-    itemsToRemove?: mongoose.Types.ObjectId[];
+    itemsToRemove?: string[];
   } = req.body;
 
   try {
@@ -141,8 +138,7 @@ export const updateShoppingList = async (req: Request, res: Response) => {
     if (itemsToRemove) {
       shoppingList.items = shoppingList.items.filter((item) => {
         return !itemsToRemove.some((idToRemove) => {
-          const objectIdToRemove = new mongoose.Types.ObjectId(idToRemove);
-          return objectIdToRemove.equals(item.itemId);
+          return idToRemove === item.itemId;
         });
       });
     }
@@ -162,12 +158,12 @@ export const updateItemCheckedStatus = async (req: Request, res: Response) => {
     itemId,
     checked,
   }: {
-    itemId?: mongoose.Types.ObjectId;
+    itemId?: string;
     checked: boolean;
   } = req.body;
 
   try {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!id) {
       return res.status(400).json({ error: "Invalid shopping list ID" });
     }
 

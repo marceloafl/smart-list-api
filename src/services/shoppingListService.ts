@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import shoppingListRepository from "../repositories/shoppingListRepository";
 
 class ShoppingListService {
@@ -7,10 +6,10 @@ class ShoppingListService {
   }
 
   async createShoppingList(shoppingListData: {
-    userId: mongoose.Types.ObjectId;
+    userId: string;
     title: string;
     items: {
-      itemId: mongoose.Types.ObjectId;
+      itemId: string;
       name: string;
       quantity: number;
       checked?: boolean;
