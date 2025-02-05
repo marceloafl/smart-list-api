@@ -131,6 +131,7 @@
         "summary": "Get items",
         "description": "Retrieves a list of items.",
         "tags": ["Items"],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "q",
@@ -166,6 +167,7 @@
         "summary": "Create a new item",
         "description": "Adds a new item to the list.",
         "tags": ["Items"],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -214,6 +216,7 @@
         "summary": "Delete an item",
         "description": "Removes an item from the list.",
         "tags": ["Items"],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -243,6 +246,7 @@
         "summary": "Get all categories",
         "description": "Retrieves a list of all categories.",
         "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "List of categories",
@@ -266,6 +270,7 @@
         "summary": "Create a new category",
         "description": "Adds a new category to the list.",
         "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -309,6 +314,7 @@
         "summary": "Delete a category",
         "description": "Removes a category from the list.",
         "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -338,6 +344,7 @@
         "summary": "Get all shopping lists",
         "description": "Retrieves a list of all shopping lists.",
         "tags": ["ShoppingLists"],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "List of shopping list",
@@ -525,6 +532,7 @@
         "summary": "Delete a shopping list",
         "description": "Removes a shopping list from the list.",
         "tags": ["ShoppingLists"],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",

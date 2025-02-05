@@ -32,9 +32,15 @@ export class UserService {
       throw new Error("Invalid email or password");
     }
 
+    if (!process.env.JWT_SECRET_KEY) {
+      throw new Error(
+        "JWT_SECRET_KEY is not defined in the environment variables"
+      );
+    }
+
     const token = jwt.sign(
       { id: user._id, email: user.email },
-      process.env.JWT_SECRET || "your_secret_key",
+      process.env.JWT_SECRET_KEY,
       { expiresIn: "1h" }
     );
 
